@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Owner;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 class OwnersController extends Controller
 {
     //adminからしかアクセス不可
@@ -45,7 +47,20 @@ class OwnersController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:owners'],
+            // unique:ownersでowners変数で定義されたownerDBの中でメールアドレスを被らないようにしている
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+        // バリデーションが成功したら、送信されたデータをownersテーブルに登録する
+        Owner::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        // 登録し終えるとadmin.owners.indexに戻り登録した情報が追記されているとOK!
+        return redirect()->route('admin.owners.index')->with("message","オーナー登録を実施しました");
     }
 
 

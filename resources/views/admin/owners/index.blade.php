@@ -11,6 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <section class="text-gray-600 body-font">
                         <div class="container px-5 py-24 mx-auto">
+                            <x-flash-message status="info"/>
                             <div style="display:flex; padding-bottom: 20px; justify-content:flex-end;">
                                 <button onclick="location.href='{{route('admin.owners.create')}}'"
                                     class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">新規作成</button>
