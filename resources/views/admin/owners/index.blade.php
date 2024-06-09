@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <section class="text-gray-600 body-font">
                         <div class="container px-5 py-24 mx-auto">
-                            <x-flash-message status="info"/>
+                            <x-flash-message status="info" />
                             <div style="display:flex; padding-bottom: 20px; justify-content:flex-end;">
                                 <button onclick="location.href='{{route('admin.owners.create')}}'"
                                     class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">新規作成</button>
@@ -41,8 +41,10 @@
                                                 <td class="px-4 py-3"> {{$owner->name}}</td>
                                                 <td class="px-4 py-3"> {{$owner->email}}</td>
                                                 <td class="px-4 py-3">{{$owner->created_at->diffForHumans()}}</td>
-                                                <td class="w-10 text-center">
-                                                    <input name="plan" type="radio">
+                                                <td class="px-4 py-3 ">
+                                                    <button
+                                                        onclick="location.href='{{route('admin.owners.edit', ['owner' => $owner->id])}}'"
+                                                        class="mx-auto text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded">編集</button>
                                                 </td>
                                             </tr>
                                         @endforeach 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+
 class OwnersController extends Controller
 {
     //adminからしかアクセス不可
@@ -35,9 +36,9 @@ class OwnersController extends Controller
 
         // dd("オーナー登録一覧");
 
-        $owners = Owner::select("name","email","created_at")->get(); 
+        $owners = Owner::select("id", "name", "email", "created_at")->get();
 
-        return view("admin.owners.index",compact("owners"));
+        return view("admin.owners.index", compact("owners"));
     }
 
     public function create()
@@ -60,7 +61,7 @@ class OwnersController extends Controller
             'password' => Hash::make($request->password),
         ]);
         // 登録し終えるとadmin.owners.indexに戻り登録した情報が追記されているとOK!
-        return redirect()->route('admin.owners.index')->with("message","オーナー登録を実施しました");
+        return redirect()->route('admin.owners.index')->with("message", "オーナー登録を実施しました");
     }
 
 
@@ -72,11 +73,21 @@ class OwnersController extends Controller
 
     public function edit($id)
     {
-        //
+        $owner = Owner::findOrFail($id);
+        // dd($owner);
+        return view("admin.owners.edit", compact("owner"));
+
     }
     public function update(Request $request, $id)
     {
-        //
+        $owner = Owner::findOrFail($id);
+        $owner->name = $request->name;
+        $owner->email = $request->email;
+        $owner->password = $request->password;
+        $owner->save();
+
+        // 登録し終えるとadmin.owners.indexに戻り登録した情報が追記されているとOK!
+        return redirect()->route('admin.owners.index')->with("message", "オーナー登録を実施しました");
     }
 
 
