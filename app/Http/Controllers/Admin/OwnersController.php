@@ -17,13 +17,13 @@ class OwnersController extends Controller
     // admin/dashboardへ
     public function index()
     {
-        $data_now = Carbon::now();
+        // $data_now = Carbon::now();
 
-        echo $data_now;
+        // echo $data_now;
 
-        $e_all = Owner::all(); 
+        // $e_all = Owner::all(); 
 
-        $q_get = DB::table("owners")->select("name","created_at")->get();
+        // $q_get = DB::table("owners")->select("name","created_at")->get();
 
         // $q_first = DB::table("owners")->select("name")->first();
 
@@ -33,12 +33,14 @@ class OwnersController extends Controller
 
         // dd("オーナー登録一覧");
 
-        return view("admin.owners.index",compact("e_all","q_get"));
+        $owners = Owner::select("name","email","created_at")->get(); 
+
+        return view("admin.owners.index",compact("owners"));
     }
 
     public function create()
     {
-        //
+        return view("admin.owners.create");
     }
 
     public function store(Request $request)
