@@ -22,9 +22,10 @@ use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+// 新規登録させないように
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// });
 
 Route::prefix("expired-owners")
 
@@ -45,7 +46,7 @@ Route::prefix("expired-owners")
     });
 
 //http://127.0.0.1:8000/admin/ownersでアクセスされた際OwnersControllerへ
-Route::resource('owners', OwnersController::class)->middleware("auth:admin");
+Route::resource('owners', OwnersController::class)->middleware("auth:admin")->except("show");
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
