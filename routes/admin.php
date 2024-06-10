@@ -25,6 +25,25 @@ use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 Route::get('/', function () {
     return view('admin.welcome');
 });
+
+Route::prefix("expired-owners")
+
+    ->middleware("auth:admin")->group(function () {
+
+        Route::get("index", [OwnersController::class, "expiredOwnerIndex"])
+
+            ->name("expired-owners.index");
+
+        Route::post(
+            "destroy/{owner}",
+
+            [OwnersController::class, "expiredOwnerDestroy"]
+        )
+
+            ->name("expired-owners.destroy");
+
+    });
+
 //http://127.0.0.1:8000/admin/ownersでアクセスされた際OwnersControllerへ
 Route::resource('owners', OwnersController::class)->middleware("auth:admin");
 
