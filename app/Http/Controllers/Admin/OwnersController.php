@@ -36,7 +36,7 @@ class OwnersController extends Controller
 
         // dd("オーナー登録一覧");
 
-        $owners = Owner::select("id", "name", "email", "created_at")->get();
+        $owners = Owner::select("id", "name", "email", "created_at")->paginate(3);
 
         return view("admin.owners.index", compact("owners"));
     }
