@@ -779,7 +779,8 @@ select {
 .mb-12 {
   margin-bottom: 3rem;
 }
-.mb-4 {
+.
+ {
   margin-bottom: 1rem;
 }
 .ml-1 {
@@ -1045,6 +1046,10 @@ select {
 .border-transparent {
   border-color: transparent;
 }
+.bg-blue-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(39 110 226 / var(--tw-bg-opacity));
+}
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
@@ -1077,6 +1082,9 @@ select {
 }
 .p-2 {
   padding: 0.5rem;
+}
+.p-4 {
+  padding: 1.0rem;
 }
 .p-6 {
   padding: 1.5rem;
