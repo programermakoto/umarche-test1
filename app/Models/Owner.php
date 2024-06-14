@@ -18,10 +18,8 @@ class Owner extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
-     */
+     * 
     protected $hidden = [
         'password',
         'remember_token',

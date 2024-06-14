@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Owner;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
+use Throwable;
+use Illuminate\Support\Facades\Log;
+use App\Models\Owner;
+use App\Models\shop;
 
 class OwnersController extends Controller
 {
@@ -54,12 +57,28 @@ class OwnersController extends Controller
             // unique:ownersでowners変数で定義されたownerDBの中でメールアドレスを被らないようにしている
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        try{
+            DB::transaction(function() use($request){
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
+                shop::create([
+                    "owner_id"=>$owner->id,
+                    "name"=>"店舗名",
+                    "information"=>"",
+                    "filename"=>"",
+                    "is_selling"=>true
+                ]);
+            });
+        }
+        catch(Throwable $e){
+            Log::error($e);
+            throw $e;
+        }
         // バリデーションが成功したら、送信されたデータをownersテーブルに登録する
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+       
         // 登録し終えるとadmin.owners.indexに戻り登録した情報が追記されているとOK!
         return redirect()->route('admin.owners.index')->with(["message"=>"オーナー登録を実施しました","status"=>"info"]);
     }
