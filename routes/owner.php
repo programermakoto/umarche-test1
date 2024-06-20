@@ -10,7 +10,7 @@ use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use App\Http\Controllers\Owner\ShopController;
-
+use App\Http\Controllers\Owner\ImageController; //ImageControllerの読み込みを次にする
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,9 +34,13 @@ Route::prefix("shops")
         Route::get("edit/{shop}", [ShopController::class, "edit"])->name("shops.edit");
         // http://127.0.0.1:8000/owner/shops/updateでアクセスされた際,ShopControllerを実装
         // Route::get("update/{shop}", [ShopController::class, "update"])->name("shops.update");
-        Route::post("update.shop", [ShopController::class, "update"])->name("shops.update");
+        Route::post("update/{shop}", [ShopController::class, "update"])->name("shops.update");
 
     });
+    Route::resource('images',ImageController::class)
+
+->middleware("auth:owners")->except(["show"]); //ownerからのみアクセス可能かつ
+
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
 })->middleware(['auth:owners'])->name('dashboard');
@@ -66,7 +70,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.update');
 });
 
-Route::middleware('auth:owner')->group(function () {
+Route::middleware('auth:owners')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
         ->name('verification.notice');
 

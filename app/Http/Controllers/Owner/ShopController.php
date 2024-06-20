@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use InterventionImage;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
+
 class ShopController extends Controller
 {
     public function __construct()
@@ -57,13 +58,22 @@ class ShopController extends Controller
         //http://127.0.0.1:8000/owner/shops/edit/1
         return view("owner.shops.edit", compact("shop"));
     }
-    public function update(UploadImageRequest $request)
+    public function update(UploadImageRequest $request,$id )
     {
+        $request->validate([
+
+            'name' => ['required', 'string', 'max:50'],
+
+            'information' => ['required', 'string', 'max:1000'],
+
+            'is_selling' => ['required'],
+
+        ]);
         $imageFile = $request->image;//imgを受け取り変数へ
 
         if (!is_null($imageFile) && $imageFile->isValid()) {//nullではないかアップロードできてるか確認
 
-            $fileNameToStore = ImageService::upload($imageFile,"shops");
+            $fileNameToStore = ImageService::upload($imageFile, "shops");
             // Storage::putFile("public/shops",$imageFile);//保存先と保存したいファイル
 
             // $fileName = uniqid(rand() . "_");//ランダムなファイルを作成
@@ -77,7 +87,31 @@ class ShopController extends Controller
             // Storage::put("public/shops/" . $fileNameToStore, $resizedImage);//ファイルからのファイル名,リサイズした画像
 
         }
+        $shop = Shop::findOrFail($id);
 
-        return redirect()->route("owner.shops.index");
+        $shop->name = $request->name;
+
+        $shop->information = $request->information;
+
+        $shop->is_selling = $request->is_selling;
+        if (!is_null($imageFile) && $imageFile->isValid()) {
+
+            $shop->filename = $fileNameToStore;
+
+        }
+
+        $shop->save();
+
+        return redirect()
+
+            ->route("owner.shops.index")
+
+            ->with([
+
+                "message" => "店舗情報を追加しました",
+
+                "status" => "info"
+
+            ]);
     }
 }

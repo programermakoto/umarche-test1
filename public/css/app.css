@@ -965,6 +965,9 @@ select {
 .flex {
   display: flex;
 }
+.justify-around  {
+  justify-content: space-around;
+}
 
 .inline-flex {
   display: inline-flex;
