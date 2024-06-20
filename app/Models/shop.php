@@ -16,6 +16,7 @@ class shop extends Model
         'filename',
         'is_selling',
     ];
+    // ownerとshopをつなぐもの
     public function owner(){
         return $this->belongsTo(Owner::class);
     }
