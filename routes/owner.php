@@ -33,7 +33,8 @@ Route::prefix("shops")
         // http://127.0.0.1:8000/owner/shops/editでアクセスされた際,ShopControllerを実装
         Route::get("edit/{shop}", [ShopController::class, "edit"])->name("shops.edit");
         // http://127.0.0.1:8000/owner/shops/updateでアクセスされた際,ShopControllerを実装
-        Route::post("update/{shop}", [ShopController::class, "update"])->name("shops.update");
+        // Route::get("update/{shop}", [ShopController::class, "update"])->name("shops.update");
+        Route::post("update.shop", [ShopController::class, "update"])->name("shops.update");
 
     });
 Route::get('/dashboard', function () {
