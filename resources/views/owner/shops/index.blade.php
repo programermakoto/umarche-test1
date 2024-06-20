@@ -31,7 +31,7 @@
 
                                     </div>
 
-                                    <div class="text-xl"> {{$shop->name}} </div>
+                                    <div class="text-xl  ml-1"> {{$shop->name}} </div>
 
                                     <div>
 
