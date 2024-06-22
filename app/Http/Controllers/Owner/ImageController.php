@@ -8,7 +8,7 @@ use App\Models\Image;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
-
+use Illuminate\Support\Facades\Storage;
 class ImageController extends Controller
 {
     public function __construct()
@@ -106,30 +106,55 @@ class ImageController extends Controller
         $request->validate([
 
             'title' => ['string', 'max:50'],
-            
-            ]);
-            
-            $image = Image::findOrFail($id);
-            
-            $image->title = $request->title;
-            
-            $image->save();
-            
-            return redirect()
-            
+
+        ]);
+
+        $image = Image::findOrFail($id);
+
+        $image->title = $request->title;
+
+        $image->save();
+
+        return redirect()
+
             ->route("owner.images.index")
-            
+
             ->with([
-            
-            "message" => "画像情報を更新しました",
-            
-            "status" => "info"
-            
+
+                "message" => "画像情報を更新しました",
+
+                "status" => "info"
+
             ]);
     }
 
     public function destroy($id)
     {
-        //
+        // storageフォルダーの中の選択されたIDの画像を消さないといけないので
+
+        $image = Image::findOrFail($id);
+
+        //ストレージフォルダのありかを示さないといけない
+
+        $filePath = "public/prodcuts/" . $image->filename;
+
+        if (Storage::exists($filePath)) {
+
+            storage::delete($filePath);
+        }
+
+        Image::findOrFail($id)->delete();
+
+        return redirect()
+
+            ->route("owner.images.index")
+
+            ->with([
+
+                "message" => "画像を削除しました",
+
+                "status" => "alert"
+
+            ]);
     }
 }

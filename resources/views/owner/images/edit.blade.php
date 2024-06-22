@@ -20,7 +20,7 @@
 
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                    <form method="post" action="{{ route('owner.images.update',['image' => $image->id]) }}">
+                    <form method="post" action="{{ route('owner.images.update', ['image' => $image->id]) }}">
 
                         @csrf
 
@@ -43,17 +43,17 @@
 
                                 <div class="p-2 w-1/2 mx-auto">
 
-                                <div class="relative">
+                                    <div class="relative">
 
-                                    <div class="w-32">
+                                        <div class="w-32">
 
-                                        <x-thumbnail :filename="$image->filename" type="productss" />
+                                            <x-thumbnail :filename="$image->filename" type="products" />
+
+                                        </div>
 
                                     </div>
 
                                 </div>
-
-                            </div>
                             </div>
 
                             <div class="p-2 w-full flex justify-around mt-4">
@@ -69,6 +69,22 @@
                         </div>
 
                     </form>
+                    <form id="delete_{{ $image->id }}" method="post"
+                        action="{{ route('owner.images.destroy', ['image' => $image->id]) }}">
+
+                        @csrf
+
+                        @method('delete')
+
+                        <div class="p-2 w-full flex justify-around mt-32">
+
+                            <a href="#" data-id="{{ $image->id }}" onclick="deletePost(this)"
+                                class=" mx-auto text-white bg-red-500 border-0 py-2 px-12 focus:outline-none hover:bg-red-600 rounded "
+                                style="background: red">　削除する　</a>
+
+                        </div>
+
+                    </form>
 
                 </div>
 
@@ -77,5 +93,19 @@
         </div>
 
     </div>
+    <script>
 
+        function deletePost(e) {
+
+            "use strict";
+
+            if (confirm("本当に削除しても良いですか？")) {
+
+                document.getElementById("delete_" + e.dataset.id).submit();
+
+            }
+
+        }
+
+    </script>
 </x-app-layout>
