@@ -45,11 +45,11 @@
 
                                     <div class="relative">
 
-                                        <div class="w-32">
+                              
 
                                             <x-thumbnail :filename="$image->filename" type="products" />
 
-                                        </div>
+                                     
 
                                     </div>
 

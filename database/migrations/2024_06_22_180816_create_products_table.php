@@ -15,6 +15,15 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string("name");
+
+            $table->text("information");
+
+            $table->unsignedInteger("price");
+
+            $table->boolean("is_selling");
+
+            $table->integer("sort_order")->nullable();//初期在庫のことで在庫がない可能性も兼ねてnullable()を書いておく。
             $table->foreignId("shop_id")
 
                 ->constrained()
@@ -32,6 +41,25 @@ class CreateProductsTable extends Migration
                 ->nullable()
 
                 ->constrained("images");
+
+            $table->foreignId("image2")
+
+                ->nullable()
+
+                ->constrained("images");
+
+            $table->foreignId("image3")
+
+                ->nullable()
+
+                ->constrained("images");
+
+            $table->foreignId("image4")
+
+                ->nullable()
+
+                ->constrained("images");
+
             $table->timestamps();
         });
     }

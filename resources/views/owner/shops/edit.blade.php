@@ -47,11 +47,11 @@
 
                                 <div class="relative">
 
-                                    <div class="w-32">
+                                    
 
                                         <x-thumbnail :filename="$shop->filename" type="shops" />
 
-                                    </div>
+                                   
 
                                 </div>
 
