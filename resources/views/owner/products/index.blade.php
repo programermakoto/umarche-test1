@@ -18,7 +18,7 @@
 
                 <div class="p-6 bg-white border-b border-gray-200">
 
-                    <x-flash-message status="session('status')" />
+                    <x-flash-message status="{{ session('status') }}" />
 
                     <div class="flex justify-end mb-4">
 
@@ -46,7 +46,8 @@
 
                                             {{-- 変更前　<x-thumbnail :filename="$image->filename" type="products" /> --}}
 
-                                            <x-thumbnail :filename="$product->imageFirst->filename" type="products" />
+                                            <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
+                                            <!-- <x-thumbnail filename="{{ $product->imageFirst ? $product->imageFirst->filename : '' }}" type="products" /> -->
 
                                             {{-- 変更前　<div class="text-xl"> {{ $image->title }} </div> --}}
 

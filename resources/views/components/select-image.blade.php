@@ -35,16 +35,16 @@ $modal="modal-5";//modal-5とはidのことです
 @endphp
 
 
-<div class="modal micromodal-slide" id="{{$modal}}" aria-hidden="true">
+<div class="modal micromodal-slide" id="{{ $modal }}" aria-hidden="true">
     <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="{{$modal}}-title">
+      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="{{ $modal }}-title">
         <header class="modal__header">
-          <h2 class="modal__title" id="{{$modal}}-title">
+          <h2 class="modal__title" id="{{ $modal }}-title">
            ファイル選択してください
           </h2>
           <button type="button" class="modal__close" aria-label="Close modal" data-micromodal-close></button>
         </header>
-        <main class="modal__content" id="{{$modal}}-content">
+        <main class="modal__content" id="{{ $modal }}-content">
         <div class="flex flex-wrap">
 
 @foreach ($images as $image)
@@ -59,11 +59,11 @@ data-file="{{$image->filename}}"
 
 data-path="{{asset("storage/products/")}}"
 
-data-modal="{{$modal}}"
+data-modal="{{ $modal }}"
 
-src="{{ asset("storage/products/" . $image->filename)}}">
+src="{{ asset('storage/products/' . $image->filename) }}">
 
-{{-- <x-thumbnail :filename="$image->filename" type="products" /> --}}
+ <!-- <x-thumbnail :filename="$image->filename" type="products" />  -->
 
 <div class="text-gray-700"> {{ $image->title }} </div>
 
@@ -77,7 +77,6 @@ src="{{ asset("storage/products/" . $image->filename)}}">
         </main>
         <footer class="modal__footer">
           <button type="button" class="modal__btn" data-micromodal-close aria-label="Close this dialog window">閉じる</button>
-
         </footer>
       </div>
     </div>
