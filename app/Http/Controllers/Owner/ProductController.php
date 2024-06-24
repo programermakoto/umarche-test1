@@ -108,7 +108,9 @@ class ProductController extends Controller
 
 
     public function store(ProductRequest $request)
+    
     {
+        
         $request->validate([
 
             'name' => ['required', 'string', 'max:50'],
