@@ -52,7 +52,7 @@
 
                                             {{-- 変更前　<div class="text-xl"> {{ $image->title }} </div> --}}
 
-                                            {{--最初はないのでコメントに <div class="text-xl"> {{ $product->name }} </div> --}}
+                      <div class="text-xl"> {{ $product->name }} </div>
 
                                         </div>
 

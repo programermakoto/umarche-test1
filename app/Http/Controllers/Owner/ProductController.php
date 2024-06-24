@@ -14,6 +14,7 @@ use App\Models\Stock;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -106,7 +107,7 @@ class ProductController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $request->validate([
 
@@ -241,9 +242,100 @@ class ProductController extends Controller
 
         return view("owner.products.edit", compact("product", "quantity", "shops", "images", "categories"));
     }
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);//1つのプロダクトを指定できます
+        $quantity = Stock::where("product_id", $product->id)
+
+            ->sum("quantity");//一つの商品の在庫一つの商品の在庫情報を取るために
+//$request->current_quantityでedit画面で表示してる数量と$quantityでアップデートで読み込んだ数量が同じでなかったら
+
+        if ($request->current_quantity !== $quantity) {
+
+            $id = $request->route()->parameter("product"); //productのidを取得
+
+            return redirect()->route("owner.products.edit", ['product' => $id])//['product'=> $id]にすることでルートパラメーターを持ったままeditに渡せる
+
+                ->with(["message" => "在庫数が変更されました！！再度変更お願いします", "status" => "alert"]);
+        } else {
+            try {
+
+                // $product = Product::findOrFail($id)となり今回は新規ではなく元々あるものを更新するので$productという変数を入れてあげる
+
+                DB::transaction(function () use ($request, $product) {
+
+                    $product->name = $request->name;
+
+                    $product->information = $request->information;
+
+                    $product->price = $request->price;
+
+                    $product->sort_order = $request->sort_order;
+
+                    $product->shop_id = $request->shop_id;
+
+                    $product->secondary_category_id = $request->category;
+
+                    $product->image1 = $request->image1;
+
+                    $product->image2 = $request->image2;
+
+                    $product->image3 = $request->image3;
+
+                    $product->image4 = $request->image4;
+
+                    $product->is_selling = $request->is_selling;
+
+                    $product->save();
+
+                    //追加の時
+
+                    if ($request->type === '1') {
+
+                        $newQuantity = $request->quantity;
+
+                    }
+
+                    //削減の時* -1を入れることでマイナスの値を入れることが可能
+
+                    if ($request->type === '2') {
+
+                        $newQuantity = $request->quantity * -1;
+
+                    }Stock::create([
+
+                        "product_id" => $product->id,
+
+                        "type" => $request->type,
+
+                        "quantity" => $newQuantity
+
+                    ]);
+
+                }, 2);
+
+            } catch (Throwable $e) {
+                Log::error($e);
+
+                throw $e;
+
+            }
+
+            // リダイレクション処理
+
+            return redirect()
+
+                ->route('owner.products.index')
+
+                ->with([
+
+                    "message" => "商品情報を更新しました。",
+
+                    "status" => "info"
+
+                ]);
+        }
+
     }
 
 
