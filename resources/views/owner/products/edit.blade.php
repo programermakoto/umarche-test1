@@ -18,7 +18,7 @@
 
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-                    <form method="post" action="{{ route('owner.products.store') }}">
+                    <form method="post" action="{{ route('owner.products.update',['product'=>$product->id]) }}">
 
                         @csrf
 
@@ -29,7 +29,7 @@
 
                                     <label for="name" class="leading-7 text-sm text-gray-600">商品名 ※必須</label>
 
-                                    <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                                    <input type="text" id="name" name="name" value="{{ $product->name }}" required
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 
                                 </div>
@@ -45,7 +45,7 @@
                                     <textarea id="information" name="information" required rows="10"
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 
-{{ old("information") }}
+{{ $product->information }}
 
 </textarea>
 
@@ -59,7 +59,7 @@
 
                                     <label for="price" class="leading-7 text-sm text-gray-600">価格 ※必須</label>
 
-                                    <input type="number" id="price" name="price" value="{{ old('price') }}" {{-- {{
+                                    <input type="number" id="price" name="price" value="{{ $product->price }}" {{-- {{
                                         old('name') }}と書くことでバリーデーションで弾かれても文字を残すことができる --}} required
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
 
@@ -80,19 +80,37 @@
                                 </div>
 
                             </div>
+                            <div class="p-2 w-1/2 mx-auto">
+
+                                    <div class="relative flex justify-around">
+
+                                        <div><input type="radio" name="type" value="1" class="mr-2" checked>追加</div>
+
+                                        <div><input type="radio" name="type" value="0" class="mr-2">削減</div>
+
+                                    </div>
+
+                            </div>
 
                             <div class="p-2 w-1/2 mx-auto">
 
                                 <div class="relative">
 
-                                    <label for="quantity" class="leading-7 text-sm text-gray-600">初期在庫※必須</label>
+                                    <label for="quantity" class="leading-7 text-sm text-gray-600">数量※必須</label>
 
-                                    <input type="number" id="quantity" name="quantity" value="{{ old("quantity") }}"
+                                    <input type="number" id="quantity" name="quantity" value="0"
                                         required
                                         class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-
+<span class="text-sm">0~99の範囲で入力してください</span>
                                 </div>
 
+                            </div>
+                            <div class="p-2 w-1/2 mx-auto">
+                                <div class="relative">
+                                    <label for="current_quantity" class="leading-7 text-sm text-gray-600">現在の在庫</label>
+                                    <input type="hidden" id="current_quantity" name="current_quantity" value="{{ $quantity }}">
+                                    <div class="w-full bg-gray-100 bg-opacity-50 rounded text-base outline-none text-gray-700 py-1 px-3 leading-8"> {{ $quantity }} </div>
+                                </div>
                             </div>
 
                             <div class="p-2 w-1/2 mx-auto">
@@ -106,7 +124,8 @@
 
                                         @foreach($shops as $shop)
 
-                                            <option value="{{ $shop->id }}">
+                                            <option value="{{ $shop->id }}"
+                                            @if($shop->id === $product->shop_id) selected @endif >
 
                                                 {{ $shop->name }}
 
@@ -138,7 +157,8 @@
 
                                                 @foreach ($category->secondary as $secondary)
 
-                                                    <option value="{{ $secondary->id }}">{{ $secondary->name}}</option>
+                                                    <option value="{{ $secondary->id }}" @if($secondary->id === $product->secondary_category_id) selected @endif >
+                                                    {{ $secondary->name}}</option>
 
                                                 @endforeach
 
@@ -148,18 +168,19 @@
                                 </div>
                             </div>
                         </div>
-                        <x-select-image :images="$images" name="image1" />
-                        <x-select-image :images="$images" name="image2" />
-                        <x-select-image :images="$images" name="image3" />
-                        <x-select-image :images="$images" name="image4" />
+                        {{-- curentId="{{$product->image1}}"で数字が入り currentImage="{{$product->imageFirst->filename ?? ''}}"の方で文字列が入りnullなら''空に--}}
+                        <x-select-image :images="$images" curentId="{{$product->image1}}" currentImage="{{$product->imageFirst->filename ?? ''}}" name="image1" />
+                        <x-select-image :images="$images"  curentId="{{$product->image1}}" currentImage="{{$product->imageSecond->filename ?? ''}}" name="image2" />
+                        <x-select-image :images="$images"  curentId="{{$product->image1}}" currentImage="{{$product->imageThird->filename ?? ''}}" name="image3" />
+                        <x-select-image :images="$images"  curentId="{{$product->image1}}" currentImage="{{$product->imageFourth->filename ?? ''}}" name="image4" />
                         <x-select-image :images="$images" name="image5" />
                         <div class="p-2 w-1/2 mx-auto">
 
                             <div class="relative flex justify-around">
 
-                                <div><input type="radio" name="is_selling" value="1" class="mr-2" checked>販売中</div>
+                                <div><input type="radio" name="type" value="1" class="mr-2" @if ($product->is_selling === 1) {checked} @endif>販売中</div>
 
-                                <div><input type="radio" name="is_selling" value="0" class="mr-2">停止中</div>
+                                <div><input type="radio" name="type" value="0" class="mr-2" @if ($product->is_selling === 1) {checked} @endif>停止中</div>
 
                             </div>
 
@@ -170,7 +191,7 @@
                                 class="mx-auto text-black bg-gray-500 border-1 py-2 px-8 focus:outline-none hover:bg-gray-600 rounded text-lg">戻る</button>
 
                             <button type="submit"
-                                class=" mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">登録する</button>
+                                class=" mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">更新</button>
 
                         </div>
                 </div>
@@ -184,13 +205,14 @@
         "use strict"
 
         const images = document.querySelectorAll(".image") //全てのimageタグを取得
-        // それぞれのimageタグに対して
-        images.forEach(image => {
+
+        images.forEach(image => { // それぞれのimageタグに対して
+
             image.addEventListener('click', function (e) { // クリックしたら
 
                 const imageName = e.target.dataset.id.substr(0, 6) //data-idの6文字
 
-                const imageId = e.target.dataset.id.replace(imageName + '_','') // 6文字カット
+                const imageId = e.target.dataset.id.replace(imageName + '_') // 6文字カット
 
                 const imageFile = e.target.dataset.file
 

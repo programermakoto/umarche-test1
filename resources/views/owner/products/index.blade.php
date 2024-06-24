@@ -33,8 +33,8 @@
 
                         {{-- 変更前　@foreach ($images as $image) --}}
 
-                        
-                            @foreach ($ownerInfo as $owner)
+
+                        @foreach ($ownerInfo as $owner)
                             @foreach ($owner->shop->product as $product)
                                 <div class="w-1/4 p-2 md:p-2">
 
@@ -46,7 +46,8 @@
 
                                             {{-- 変更前　<x-thumbnail :filename="$image->filename" type="products" /> --}}
 
-                                            <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
+                                            <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}"
+                                                type="products" />
                                             <!-- <x-thumbnail filename="{{ $product->imageFirst ? $product->imageFirst->filename : '' }}" type="products" /> -->
 
                                             {{-- 変更前　<div class="text-xl"> {{ $image->title }} </div> --}}

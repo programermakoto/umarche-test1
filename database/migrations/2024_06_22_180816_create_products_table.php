@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
 
             $table->boolean("is_selling");
 
-            $table->integer("sort_order")->nullable();//初期在庫のことで在庫がない可能性も兼ねてnullable()を書いておく。
+            $table->integer("sort_order")->nullable(); //初期在庫のことで在庫がない可能性も兼ねてnullable()を書いておく。
             $table->foreignId("shop_id")
 
                 ->constrained()

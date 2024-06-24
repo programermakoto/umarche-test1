@@ -31,6 +31,10 @@ $modal="modal-5";//modal-5とはidのことです
 }
 
 //id="modal-1"をid="{{$modal}}"にすればifで作った変数名で置き換えれる
+$cImage = $currentImage ?? '';
+
+$cId = $curentId ?? '';
+
 
 @endphp
 
@@ -46,34 +50,32 @@ $modal="modal-5";//modal-5とはidのことです
         </header>
         <main class="modal__content" id="{{ $modal }}-content">
         <div class="flex flex-wrap">
+          @foreach ($images as $image)
+          <div class="w-1/4 p-2 md:p-2">
+            <div class="border rounded-md p-2 md:p-4">
 
-@foreach ($images as $image)
+            <img class="image" data-id="{{ $name }}_{{ $image->id }}"
 
-<div class="w-1/4 p-2 md:p-2">
+            data-file="{{$image->filename}}"
 
-<div class="border rounded-md p-2 md:p-4">
+            data-path="{{asset("storage/products/")}}"
 
-<img class="image" data-id="{{ $name }}_{{ $image->id }}"
+            data-modal="{{ $modal }}"
 
-data-file="{{$image->filename}}"
+            src="{{ asset('storage/products/' . $image->filename) }}">
 
-data-path="{{asset("storage/products/")}}"
+            <!-- <x-thumbnail :filename="$image->filename" type="products" />  -->
 
-data-modal="{{ $modal }}"
+            <div class="text-gray-700"> {{ $image->title }} </div>
 
-src="{{ asset('storage/products/' . $image->filename) }}">
+            </div>
 
- <!-- <x-thumbnail :filename="$image->filename" type="products" />  -->
+            </div>
 
-<div class="text-gray-700"> {{ $image->title }} </div>
 
-</div>
+            @endforeach
 
-</div>
-
-@endforeach
-
-</div>
+            </div>
         </main>
         <footer class="modal__footer">
           <button type="button" class="modal__btn" data-micromodal-close aria-label="Close this dialog window">閉じる</button>
@@ -85,17 +87,16 @@ src="{{ asset('storage/products/' . $image->filename) }}">
   <div class="flex justify-around items-center mb-4">{{-- ボタンと画像を中央揃え --}}
     
 
-  <a class="py-2 px-4" style="background-color:#ddd; margin:10px;"
-   data-micromodal-trigger="{{$modal}}" href='javascript:;'>ファイルを選択</a>
+  <a class="py-2 px-4" style="background-color:#ddd; margin:10px;" data-micromodal-trigger="{{ $modal }}" href='javascript:;'>ファイルを選択</a>
 
 <div class="w-1/4">
 
-<img id="{{ $name }}_thumbnail" src="">{{--id="{{ $name }}がimage1や2が入ってくる場所です--}}
+<img id="{{ $name }}_thumbnail" @if($cImage) src="{{asset('storage/products/' . $cImage)}}" @else src="" @endif src="">{{--id="{{ $name }}がimage1や2が入ってくる場所です--}}
 
 </div>
 
 </div>
 
-<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="">
+<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="$cIdf">
 
 {{--これをJSで！--}}

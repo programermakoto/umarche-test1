@@ -108,7 +108,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $request->validate([
 
             'name' => ['required', 'string', 'max:50'],
@@ -203,8 +202,6 @@ class ProductController extends Controller
                 "status" => "info"
 
             ]);
-
-
     }
 
     public function show($id)
@@ -214,7 +211,35 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        //
+        $product = Product::findOrFail($id);//パラメーターでidが入ってくるのでfindOrFail($id)で指定すれば一つの商品を選ぶことができます
+
+        $quantity = Stock::where("product_id", $product->id)
+
+            ->sum("quantity");//一つの商品の在庫一つの商品の在庫情報を取るために
+
+        // whereで条件指定　→　"owner_id",Auth::id()オーナーでログインしたID
+
+        $shops = Shop::where("owner_id", Auth::id())
+
+            ->select("id", "name")
+
+            ->get();
+
+        $images = Image::where("owner_id", Auth::id())
+
+            ->select("id", "title", "filename")
+
+            ->orderBy("updated_at", "desc")
+
+            ->get();
+
+        // リレーションで取得する際n+1問題が起こるのでwithで！
+
+        $categories = PrimaryCategory::with("secondary")
+
+            ->get();
+
+        return view("owner.products.edit", compact("product", "quantity", "shops", "images", "categories"));
     }
     public function update(Request $request, $id)
     {
