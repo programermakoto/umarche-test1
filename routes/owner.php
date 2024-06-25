@@ -42,14 +42,14 @@ Route::prefix("shops")
 Route::resource('images', ImageController::class)->middleware("auth:owners")->except(["show"]); //ownerからのみアクセス可能かつ
 Route::resource('products', ProductController::class)->middleware("auth:owners")->except(["show"]); //ownerからのみアクセス可能かつ
 
-Route::get('/dashboard', function () {
-    return view('owner.dashboard');
-})->middleware(['auth:owners'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('owner.dashboard');
+// })->middleware(['auth:owners'])->name('dashboard');
 
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+    // Route::get('register', [RegisteredUserController::class, 'create'])
+    //     ->name('register');
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
