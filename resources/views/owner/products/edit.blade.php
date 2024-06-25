@@ -180,9 +180,9 @@
 
                             <div class="relative flex justify-around">
 
-                                <div><input type="radio" name="type" value="1" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>販売中</div>
+                                <div><input type="radio" name="is_selling" value="1" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>販売中</div>
 
-                                <div><input type="radio" name="type" value="0" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>停止中</div>
+                                <div><input type="radio" name="is_selling" value="0" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>停止中</div>
 
                             </div>
 
@@ -214,7 +214,7 @@
 
                 const imageName = e.target.dataset.id.substr(0, 6) //data-idの6文字
 
-                const imageId = e.target.dataset.id.replace(imageName + '_') // 6文字カット
+                const imageId = e.target.dataset.id.replace(imageName + '_','') // 6文字カット
 
                 const imageFile = e.target.dataset.file
 

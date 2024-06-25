@@ -33,7 +33,7 @@ $modal="modal-5";//modal-5とはidのことです
 //id="modal-1"をid="{{$modal}}"にすればifで作った変数名で置き換えれる
 $cImage = $currentImage ?? '';
 
-$cId = $curentId ?? '';
+$cId = $currentId ?? '';
 
 
 @endphp
@@ -56,15 +56,16 @@ $cId = $curentId ?? '';
 
             <img class="image" data-id="{{ $name }}_{{ $image->id }}"
 
-            data-file="{{$image->filename}}"
+            data-file="{{ $image->filename }}"
 
-            data-path="{{asset("storage/products/")}}"
+            data-path="{{ asset("storage/products/" )}}"
 
             data-modal="{{ $modal }}"
 
             src="{{ asset('storage/products/' . $image->filename) }}">
 
             <!-- <x-thumbnail :filename="$image->filename" type="products" />  -->
+
 
             <div class="text-gray-700"> {{ $image->title }} </div>
 
@@ -97,6 +98,6 @@ $cId = $curentId ?? '';
 
 </div>
 
-<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="$cIdf">
+<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="{{$cId}}">
 
 {{--これをJSで！--}}
