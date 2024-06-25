@@ -108,9 +108,8 @@ class ProductController extends Controller
 
 
     public function store(ProductRequest $request)
-    
     {
-        
+
         $request->validate([
 
             'name' => ['required', 'string', 'max:50'],
@@ -343,6 +342,20 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        //
+        Product::findOrFail($id)->delete();//idで引っ掛かったものを削除
+
+        return redirect()
+
+            ->route("owner.products.index")
+
+            ->with([
+
+                "message" => "商品を削除しました",
+
+                "status" => "alert"
+
+            ]);
+
+
     }
 }
