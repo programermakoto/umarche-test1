@@ -24,9 +24,9 @@ use App\Http\Controllers\Owner\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('owner.welcome');
-});
+// Route::get('/', function () {
+//     return view('owner.welcome');
+// });
 //http://127.0.0.1:8000/owner/shops/でアクセスされた際のコード
 Route::prefix("shops")
     ->middleware("auth:owners")->group(function () {
@@ -42,9 +42,9 @@ Route::prefix("shops")
 Route::resource('images', ImageController::class)->middleware("auth:owners")->except(["show"]); //ownerからのみアクセス可能かつ
 Route::resource('products', ProductController::class)->middleware("auth:owners")->except(["show"]); //ownerからのみアクセス可能かつ
 
-// Route::get('/dashboard', function () {
-//     return view('owner.dashboard');
-// })->middleware(['auth:owners'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('owner.dashboard');
+})->middleware(['auth:owners'])->name('dashboard');
 
 
 Route::middleware('guest')->group(function () {
