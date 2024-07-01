@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use Illuminate\Support\Facades\Auth; //ユーザーidを取得するために
 use App\Models\User;
+
 class CartController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
         $user = User::findOrFail(Auth::id());//ログインしてるユーザー情報を取得
 
@@ -17,17 +19,17 @@ class CartController extends Controller
 
         $totalPrice = 0;
 
-        foreach($products as $product){
+        foreach ($products as $product) {
 
-         $totalPrice += $product->price * $product->pivot->quantity;//金額と数量を掛けたものをtotalPriceに
+            $totalPrice += $product->price * $product->pivot->quantity;//金額と数量を掛けたものをtotalPriceに
 
         }
 
         // dd($products,$totalPrice);
 
-        return view("user.cart",compact("products","totalPrice"));
+        return view("user.cart", compact("products", "totalPrice"));
 
-        }
+    }
     public function add(Request $request)
     {
 
@@ -53,7 +55,16 @@ class CartController extends Controller
                 "quantity" => $request->quantity
 
             ]);
-        }return redirect()->route("user.cart.index");
+        }
+        return redirect()->route("user.cart.index");
+
+    }
+    public function delete($id)
+    {
+
+        Cart::where("product_id", $id)->where("user_id", Auth::id())->delete();//ログインしているユーザーidを削除
+
+        return redirect()->route("user.cart.index");
 
     }
 }
