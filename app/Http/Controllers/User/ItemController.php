@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Stock;
 class ItemController extends Controller
 {
     public function __construct()
@@ -71,8 +71,10 @@ class ItemController extends Controller
     {
 
         $product = Product::findOrFail($id);
+        $quantity = Stock::where("product_id", $product->id)->sum("quantity"); //一つの商品の在庫情報を取るために
 
-        return view('user.show', compact('product'));
+        if($quantity>9){$quantity=9;}//9より大きかったら９
+        return view('user.show', compact('product','quantity'));
     }
 
 
