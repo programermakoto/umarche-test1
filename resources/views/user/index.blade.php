@@ -14,7 +14,7 @@
                         @foreach ($products as $product)
                             <div class="w-1/4 p-2 md:p-2">
 
-                                <a href ="">
+                                <a href ="{{ route('user.items.show', ['item' => $product->id]) }}">
 
                                     <div class="border rounded-md p-2 md:p-4">
 
