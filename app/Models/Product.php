@@ -8,7 +8,7 @@ use App\Models\shop;
 use App\Models\SecondaryCategory;
 use App\Models\Image;
 use App\Models\Stock;
-use\App\Models\User;
+use App\Models\User;
 class Product extends Model
 {
     use HasFactory;
