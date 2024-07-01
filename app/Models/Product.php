@@ -81,9 +81,9 @@ class Product extends Model
 
     public function users(){
 
-        return $this->belongsToMany(user::class,'carts')
+        return $this->belongsToMany(User::class,'carts')
 
-        ->widthPivot(['id','quantity']);
+        ->withPivot(['id','quantity']);
 
         }
 }
