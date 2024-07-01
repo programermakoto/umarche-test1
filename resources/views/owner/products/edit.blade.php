@@ -180,9 +180,9 @@
 
                             <div class="relative flex justify-around">
 
-                                <div><input type="radio" name="type" value="1" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>販売中</div>
+                                <div><input type="radio" name="is_selling" value="1" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>販売中</div>
 
-                                <div><input type="radio" name="type" value="0" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>停止中</div>
+                                <div><input type="radio" name="is_selling" value="0" class="mr-2" @if ($product->is_selling === 1) { checked } @endif>停止中</div>
 
                             </div>
 
@@ -198,6 +198,23 @@
                         </div>
                 </div>
                 </form>
+                <form id="delete_{{ $product->id }}"
+
+method="post"action="{{ route('owner.products.destroy', ['product' => $product->id]) }}">
+
+@csrf
+
+@method('delete')
+
+<div class="p-2 w-full flex justify-around mt-32">
+
+<a href="#" data-id="{{ $product->id }}"onclick="deletePost(this)"
+
+class=" mx-auto text-white bg-red-500 border-0 py-2 px-12 focus:outline-none hover:bg-red-600 rounded "style="background: red">削除する</a>
+
+</div>
+
+</form>
             </div>
         </div>
     </div>
@@ -214,7 +231,7 @@
 
                 const imageName = e.target.dataset.id.substr(0, 6) //data-idの6文字
 
-                const imageId = e.target.dataset.id.replace(imageName + '_') // 6文字カット
+                const imageId = e.target.dataset.id.replace(imageName + '_','') // 6文字カット
 
                 const imageFile = e.target.dataset.file
 
@@ -229,10 +246,23 @@
                 document.getElementById(imageName + '_hidden').value = imageId
 
                 MicroModal.close(modal);//モーダルを閉じる
+                function deletePost(e) {
+}
 
             },)
 
         })
+        function deletePost(e) {
+
+"use strict";
+
+if (confirm("本当に削除しても良いですか？")) {
+
+document.getElementById("delete_" + e.dataset.id).submit();
+
+}
+
+}
 
     </script>
 </x-app-layout>
