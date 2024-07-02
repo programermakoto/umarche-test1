@@ -1944,6 +1944,12 @@ select {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+  .lg\:flex{
+    display: flex;
+  }
+  .lg\:justify-around{
+    justify-content: space-around;
+  }
 }
 @media (prefers-color-scheme: dark) {
 

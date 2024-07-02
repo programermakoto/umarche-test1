@@ -10,6 +10,8 @@ use App\Models\Image;
 use App\Models\Stock;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Constants\Common;
+
 class Product extends Model
 {
     use HasFactory;
@@ -139,5 +141,63 @@ class Product extends Model
                 'image1.filename as filename'
 
             );
+    }
+    public function scopeSortOrder($query, $sortOrder)
+    {
+
+        // 特定のソート順が指定されていない場合や、推奨されるソート順が選択された場合のデフォルト動作の条件。
+
+        if ($sortOrder === null || $sortOrder === Common::SORT_ORDER['recommend']) {
+
+            return $query->orderBy('sort_order', 'asc');
+
+        }
+
+        // 高い価格から低い価格へ並び替えるための条件(desc)
+
+        if ($sortOrder === Common::SORT_ORDER['higherPrice']) {
+
+            return $query->orderBy('price', 'desc');
+
+        }
+
+        // 低い価格から高い価格へ並び替えるための条件(asc)
+
+        if ($sortOrder === Common::SORT_ORDER['lowerPrice']) {
+
+            return $query->orderBy('price', 'asc');
+
+        }
+
+        // 商品が追加された日付が新しい順に並び替えるための条件(desc)
+
+        if ($sortOrder === Common::SORT_ORDER['later']) {
+
+            return $query->orderBy('products.created_at', 'desc');
+
+        }
+
+        // 商品が追加された日付が古い順に並び替えるための条件(asc)
+
+        if ($sortOrder === Common::SORT_ORDER['older']) {
+
+            return $query->orderBy('products.created_at', 'asc');
+
+        }
+
+    }
+    public function scopeSelectCategory($query, $categoryId)
+    {
+
+        if ($categoryId !== "0") {
+
+            return $query->where("secondary_category_id", $categoryId);
+
+        } else {
+
+            return;
+
+        }
+
     }
 }
