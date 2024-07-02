@@ -51,10 +51,11 @@ class ItemController extends Controller
 
         $categories = PrimaryCategory::with("secondary")->get();
         $products = Product::availableItems()
-        ->selectCategory($request->category ?? "0")//選んでいない場合初期値０に！
+            ->searchKeyword($request->keyword)
+            ->selectCategory($request->category ?? "0")//選んでいない場合初期値０に！
             ->sortOrder($request->sort)
             ->paginate($request->pagination ?? '20');
-        return view('user.index', compact('products','categories'));
+        return view('user.index', compact('products', 'categories'));
 
     }
     public function show($id)
@@ -69,5 +70,5 @@ class ItemController extends Controller
         return view('user.show', compact('product', 'quantity'));
     }
 
-
+ 
 }
