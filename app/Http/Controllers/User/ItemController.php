@@ -7,13 +7,40 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Models\Stock;
+
 class ItemController extends Controller
 {
     public function __construct()
-
     {//ユーザーかどうかの確認
 
-    $this->middleware("auth:users");}
+        $this->middleware("auth:users");
+        $this->middleware(function ($request, $next) {
+
+            $id = $request->route()->parameter("item"); //itemのidを取得
+
+            // routes/web.phpのRoute::get("show/{item}",[ItemController::class,"show"])の事
+
+            if (!is_null($id)) { //itemのidが存在するなら↓
+
+                $itemId = Product::availableItems()->where('products.id', $id)->exists(); //productのidが入ってきた値idと一致してるか。入ってきた値が存在するかどうか確認。
+
+                //↓itemIdが存在していなかったら
+
+                if (!$itemId) {
+
+                    abort(404); //404の画面表示
+
+                }
+
+            }
+
+            return $next($request);
+
+        });
+
+    }
+
+
 
     public function index()
     {
@@ -27,8 +54,10 @@ class ItemController extends Controller
         $product = Product::findOrFail($id);
         $quantity = Stock::where("product_id", $product->id)->sum("quantity"); //一つの商品の在庫情報を取るために
 
-        if($quantity>9){$quantity=9;}//9より大きかったら９
-        return view('user.show', compact('product','quantity'));
+        if ($quantity > 9) {
+            $quantity = 9;
+        }//9より大きかったら９
+        return view('user.show', compact('product', 'quantity'));
     }
 
 
