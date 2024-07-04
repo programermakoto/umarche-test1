@@ -10,6 +10,7 @@ use App\Models\Stock;
 use App\Models\PrimaryCategory;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
+use App\Jobs\SendThanksMail;
 class ItemController extends Controller
 {
     public function __construct()
@@ -49,8 +50,9 @@ class ItemController extends Controller
 
 
         // dd($request);
-        Mail::to('test@example.com') //受信者の指定
-        ->send(new TestMail()); //Mailableクラス
+        // Mail::to('test@example.com') //受信者の指定
+        // ->send(new TestMail()); //Mailableクラス
+        // SendThanksMail::dispatch();
         $categories = PrimaryCategory::with("secondary")->get();
         $products = Product::availableItems()
             ->searchKeyword($request->keyword)
