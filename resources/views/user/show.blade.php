@@ -75,32 +75,39 @@
                                         class="text-sm text-gray-700">円(税込)</span>
 
                                 </div>
+                                <form method="post" action="{{ route('user.cart.add') }}">
 
-                                <div class="flex items-center">
+                                    @csrf
 
-                                    <span class="mr-3">数量</span>
+                                    <div class="flex items-center">
 
-                                    <div class="relative">
+                                        <span class="mr-3">数量</span>
 
-                                        <select
-                                            class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                                        <div class="relative">
 
-                                            <option>SM</option>
+                                            <select name="quantity"
+                                                class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
 
-                                            <option>M</option>
+                                                @for ($i = 1; $i <= $quantity; $i++)
+                                                    <option value="{{ $i }}">{{ $i }}</option>
+                                                @endfor
 
-                                            <option>L</option>
+                                            </select>
 
-                                            <option>XL</option>
-
-                                        </select>
+                                        </div>
 
                                     </div>
 
-                                </div>
+                                    <button
+                                        class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">カートに入れる</button>
 
-                                <button
-                                    class="flex ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">カートに入れる</button>
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+
+                                </form>
+
+
+
 
                             </div>
 
@@ -124,7 +131,7 @@
 
                     <div class="mb-4 text-center">
 
-                        <button  data-micromodal-trigger="modal-1" href='javascript:;' type="button"
+                        <button data-micromodal-trigger="modal-1" href='javascript:;' type="button"
                             class="text-white bg-gray-400 border-0 py-2 px-6 focus:outline-none hover:bg-gray-500 rounded">ショップの詳細も見る</button>
 
                     </div>
@@ -137,13 +144,13 @@
             <div class="modal__container " role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
                 <header class="modal__header">
                     <h2 class="modal__title text-xl text-gray-700" id="modal-1-title">
-                        {{$product->shop->name}}
+                        {{ $product->shop->name }}
                     </h2>
                     <button type="button" class="modal__close" aria-label="Close modal" data-micromodal-close></button>
                 </header>
                 <main class="modal__content" id="modal-1-content">
                     <p>
-               {{$product->shop->information}}
+                        {{ $product->shop->information }}
                     </p>
                 </main>
                 <footer class="modal__footer">
